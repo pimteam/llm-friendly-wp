@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 // Create admin menu
 function llm_friendly_wp_admin_menu() {
     add_menu_page(
@@ -43,39 +47,3 @@ function llm_friendly_wp_settings_page() {
     </div>
     <?php
 }
-
-
-// Register settings
-function llm_friendly_wp_register_settings() {
-    register_setting( 'llm_friendly_wp_settings_group', 'llm_friendly_wp_enabled' );
-
-    add_settings_section(
-        'llm_friendly_wp_main_section', // Section ID
-        'General Settings',             // Title
-        'llm_friendly_wp_main_section_callback',
-        'llm-friendly-wp'               // Page slug
-    );
-
-    add_settings_field(
-        'llm_friendly_wp_enabled',      // Field ID
-        'Enable Plugin',                // Title
-        'llm_friendly_wp_enabled_callback',
-        'llm-friendly-wp',              // Page slug
-        'llm_friendly_wp_main_section'  // Section ID
-    );
-}
-add_action( 'admin_init', 'llm_friendly_wp_register_settings' );
-
-function llm_friendly_wp_main_section_callback() {
-    echo '<p>General plugin settings.</p>';
-}
-
-function llm_friendly_wp_enabled_callback() {
-    $enabled = get_option( 'llm_friendly_wp_enabled', false );
-    ?>
-    <input type="checkbox" name="llm_friendly_wp_enabled" value="1" <?php checked( $enabled, 1 ); ?> />
-    Enable LLM-Friendly WP
-    <?php
-}
-
-

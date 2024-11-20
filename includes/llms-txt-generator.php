@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 // Function to generate llms.txt file with links to Markdown posts
 function llm_friendly_wp_generate_llms_txt( $post_ids = [] ) {

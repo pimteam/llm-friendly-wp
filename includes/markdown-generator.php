@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 // Function to convert a WordPress post to Markdown
 function llm_friendly_wp_convert_to_markdown( $post_id ) {
