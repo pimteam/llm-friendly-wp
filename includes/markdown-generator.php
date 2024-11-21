@@ -1,7 +1,10 @@
 <?php
+namespace LLM_Friendly;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
 use League\HTMLToMarkdown\HtmlConverter;
 
 /**
@@ -76,4 +79,59 @@ function generate_all_markdown() {
 
     // Restore global post data
     wp_reset_postdata();
+}
+
+/**
+ * Check if a post matches the plugin criteria for Markdown conversion.
+ *
+ * @param WP_Post $post The post object.
+ * @return bool True if the post matches the criteria, false otherwise.
+ */
+function should_convert( object $post ) : bool {
+    // Fetch settings
+    $categories = get_option( 'llm_friendly_categories', [] ); // Selected categories
+    $tags = get_option( 'llm_friendly_tags', [] ); // Selected tags
+    $include_all = get_option( 'llm_friendly_include_all', false ); // Include all categories flag
+
+    // If all categories are included, no further checks needed
+    if ( $include_all ) {
+        return true;
+    }
+
+    // Check post categories
+    $post_categories = wp_get_post_categories( $post->ID );
+    if ( array_intersect( $post_categories, $categories ) ) {
+        return true;
+    }
+
+    // Check post tags
+    $post_tags = wp_get_post_tags( $post->ID, [ 'fields' => 'ids' ] );
+    if ( array_intersect( $post_tags, $tags ) ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Hook into WordPress' save_post action to convert posts/pages to Markdown.
+ *
+ * @param int $post_id The ID of the post being saved.
+ * @param WP_Post $post The post object being saved.
+ */
+function on_save_post($post_id, $post) {
+    // Only process if it's a post or page and not an autosave
+    if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+        return;
+    }
+
+    // Ensure the post status is "publish"
+    if ( 'publish' !== $post->post_status ) {
+        return;
+    }
+
+    // Check if the post matches the criteria for Markdown conversion
+    if ( should_convert( $post ) ) {
+        post_to_markdown( $post_id );
+    }
 }
