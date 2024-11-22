@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: LLM-Friendly WP
+Plugin Name: LLM/AI-Friendly WP
 Description: A plugin to generate Markdown versions of WordPress posts and create llms.txt files for Large Language Models.
-Version: 0.1.0
+Version: 0.2.0
 Author: Kiboko Labs
 License: GPLv2 or later
 */
@@ -41,5 +41,24 @@ function deactivate() {
 }
 
 add_action('init', function(){
+    // Save markdown
     add_action( 'save_post', __NAMESPACE__.'\\on_save_post', 10, 2 );
 });
+
+// load the markdown version of any post
+add_action('template_redirect', function () {
+    $request_uri = $_SERVER['REQUEST_URI'];
+    global $post;
+
+    if (preg_match('/\.md$/', $request_uri) and !empty($post->ID)) {
+        // get Markdown
+        $markdown_content = get_post_meta($post->ID, '_llm_markdown_content', true);
+
+        if ($markdown_content) {
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo $markdown_content;
+            exit;
+        }
+    }
+});
+
