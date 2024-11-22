@@ -51,6 +51,27 @@ add_action('template_redirect', function () {
     global $post;
 
     if (preg_match('/\.md$/', $request_uri) and !empty($post->ID)) {
+        // check if the user is allowed to view the post
+        if (!is_user_logged_in() and $post->post_status !== 'publish') {
+            return;
+        }
+
+        if (!empty($post->post_password) and !post_password_required($post)) {
+            return;
+        }
+
+        // check for plugin restrictions
+        $can_view = true;
+
+        // PBP
+        if (has_filter('wppb_can_user_view_post')) {
+            $can_view = apply_filters('wppb_can_user_view_post', true, $post);
+        }
+
+        if (!$can_view) {
+            return;
+        }
+
         // get Markdown
         $markdown_content = get_post_meta($post->ID, '_llm_markdown_content', true);
 
