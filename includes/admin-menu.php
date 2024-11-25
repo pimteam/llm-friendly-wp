@@ -197,7 +197,9 @@ function generate_llms_txt_file() {
     foreach ($grouped_posts as $category_name => $category_posts) {
         $llms_txt_content .= "## " . esc_html($category_name) . "\n\n";
         foreach ($category_posts as $post) {
-            $llms_txt_content .= "- [" . esc_html(get_the_title($post->ID)) . "](" . get_permalink($post->ID) . "?md=1)\n";
+            $permalink = get_permalink($post->ID);
+            $permalink = add_query_arg('md', 1, $permalink);
+            $llms_txt_content .= "- [" . esc_html(get_the_title($post->ID)) . "](" . $permalink.")\n";
         }
         $llms_txt_content .= "\n";
     }
