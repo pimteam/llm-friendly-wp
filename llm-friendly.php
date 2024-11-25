@@ -21,7 +21,6 @@ define( 'LLMFWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Include required files
 require_once LLMFWP_PLUGIN_DIR . 'includes/admin-menu.php';
 require_once LLMFWP_PLUGIN_DIR . 'includes/markdown-generator.php';
-require_once LLMFWP_PLUGIN_DIR . 'includes/llms-txt-generator.php';
 require_once LLMFWP_PLUGIN_DIR . 'lib/html-to-markdown/vendor/autoload.php';
 
 // Activation hook
