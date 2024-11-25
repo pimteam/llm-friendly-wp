@@ -59,6 +59,8 @@ function generate_all_markdown() {
 
     // Restore global post data
     wp_reset_postdata();
+
+    flush_rewrite_rules();
 }
 
 /**
@@ -114,6 +116,8 @@ function on_save_post($post_id, $post) {
     if ( should_convert( $post ) ) {
         post_to_markdown( $post_id );
     }
+
+    flush_rewrite_rules();
 }
 
 /**
@@ -149,4 +153,40 @@ function get_eligible_posts_query() {
     $query = new \WP_Query( $args );
 
     return $query;
-}
+} // end get_eligible_posts_query
+
+
+/**
+ * Check if a post is eligible based on the selected categories and tags.
+ *
+ * @param int $post_id The ID of the post to check.
+ * @return bool True if the post is eligible, false otherwise.
+ */
+function is_post_eligible($post_id) {
+    $categories = get_option('llm_friendly_categories', []); // Selected categories
+    $categories = array_filter($categories);
+    $tags = get_option('llm_friendly_tags', []); // Selected tags
+    $categories = array_filter($categories);
+
+    // Get the post's categories and tags
+    $post_categories = wp_get_post_categories($post_id);
+    $post_tags = wp_get_post_tags($post_id, ['fields' => 'ids']);
+
+    // Check if the post matches the selected categories
+    if (!empty($categories)) {
+        $category_match = array_intersect($categories, $post_categories);
+        if (empty($category_match)) {
+            return false;
+        }
+    }
+
+    // Check if the post matches the selected tags
+    if (!empty($tags)) {
+        $tag_match = array_intersect($tags, $post_tags);
+        if (empty($tag_match)) {
+            return false;
+        }
+    }
+
+    return true;
+} // end is_post_eligible

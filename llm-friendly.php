@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: LLM/AI-Friendly WP
-Description: A plugin to generate Markdown versions of WordPress posts and create llms.txt files for Large Language Models.
-Version: 0.3
+Plugin Name: LLM-Friendly WP
+Description: A plugin to generate AI and LLM-Friendly Markdown versions of WordPress posts and create llms.txt files for Large Language Models.
+Version: 0.4
 Author: Kiboko Labs
 License: MIT
 */
@@ -29,6 +29,7 @@ register_activation_hook( __FILE__, __NAMESPACE__.'\\activate' );
 function activate() {
     // Code to execute on plugin activation, such as creating options or setting defaults
     add_option( 'llm_friendly_wp_enabled', true );
+    flush_rewrite_rules();
 }
 
 // Deactivation hook
@@ -49,7 +50,7 @@ add_action('template_redirect', function () {
     $request_uri = $_SERVER['REQUEST_URI'];
     global $post;
 
-    if (preg_match('/\.md$/', $request_uri) and !empty($post->ID)) {
+    if (isset($_GET['md']) && $_GET['md'] == 1) {
         // check if the user is allowed to view the post
         if (!is_user_logged_in() and $post->post_status !== 'publish') {
             return;
@@ -71,6 +72,9 @@ add_action('template_redirect', function () {
             return;
         }
 
+        // Check if the post is eligible based on the current settings
+        if (!is_post_eligible($post->ID)) return;
+
         // get Markdown
         $markdown_content = get_post_meta($post->ID, '_llm_markdown_content', true);
 
@@ -81,4 +85,3 @@ add_action('template_redirect', function () {
         }
     }
 });
-

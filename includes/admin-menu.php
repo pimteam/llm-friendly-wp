@@ -114,6 +114,7 @@ function handle_settings_form() {
     // Save settings
     if (isset($_POST['llm_friendly_save_settings']) or isset($_POST['llm_friendly_generate_markdown'])) {
         $selected_categories = isset($_POST['llm_friendly_categories']) ? (array) $_POST['llm_friendly_categories'] : [];
+        $selected_categories = array_filter($selected_categories);
         $filter_tags = sanitize_text_field($_POST['llm_friendly_filter_tags']);
 
         // Save options
@@ -196,7 +197,7 @@ function generate_llms_txt_file() {
     foreach ($grouped_posts as $category_name => $category_posts) {
         $llms_txt_content .= "## " . esc_html($category_name) . "\n\n";
         foreach ($category_posts as $post) {
-            $llms_txt_content .= "- [" . esc_html(get_the_title($post->ID)) . "](" . get_permalink($post->ID) . '.md' . ")\n";
+            $llms_txt_content .= "- [" . esc_html(get_the_title($post->ID)) . "](" . get_permalink($post->ID) . "?md=1)\n";
         }
         $llms_txt_content .= "\n";
     }
