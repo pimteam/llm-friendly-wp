@@ -52,7 +52,7 @@ function generate_all_markdown() {
 
     // Build query arguments
     $args = [
-        'post_type'      => 'post',
+        'post_type'      => ['post', 'page'],
         'post_status'    => 'publish',
         'posts_per_page' => -1, // Get all matching posts
     ];
@@ -66,7 +66,7 @@ function generate_all_markdown() {
     }
 
     // Query posts
-    $query = new WP_Query( $args );
+    $query = new \WP_Query( $args );
 
     if ( $query->have_posts() ) {
         while ( $query->have_posts() ) {

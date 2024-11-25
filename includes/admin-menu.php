@@ -1,4 +1,6 @@
 <?php
+namespace LLM_Friendly;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -11,13 +13,35 @@ add_action('admin_menu', __NAMESPACE__.'\\settings_page');
  */
 function settings_page() {
     add_menu_page(
-        'LLM-Friendly Content Settings', // Page title
-        'LLM-Friendly WP',               // Menu title
-        'manage_options',                // Capability
-        'llm-friendly-settings',         // Menu slug
-        __NAMESPACE__.'\\render_settings_page', // Callback function
-        'dashicons-format-aside',        // Icon
-        90                               // Position
+        'LLM-Friendly Content Settings',
+        'LLM-Friendly WP',
+        'manage_options',
+        'llm-friendly',
+        __NAMESPACE__.'\\render_settings_page',
+        'dashicons-format-aside',
+        90
+    );
+
+    add_submenu_page(
+        'llm-friendly',
+        'Content Settings',
+        'Content Settings',
+        'manage_options',
+        'llm-friendly',
+        __NAMESPACE__.'\\render_settings_page',
+        'dashicons-format-aside',
+        90
+    );
+
+    add_submenu_page(
+        'llm-friendly',
+        'LLMs.txt',
+        'LLMs.txt',
+        'manage_options',
+        'llm-friendly-llmstxt',
+        __NAMESPACE__.'\\render_settings_page',
+        'dashicons-format-aside',
+        90
     );
 }
 
@@ -39,11 +63,13 @@ function render_settings_page() {
 
             <h2>Choose what content to be available also in Markdown LLM-Friendly format:</h2>
 
+            <p><b>Note: this markdown content will be <span style="color:red;">public</span> unless your post/page is in Private mode, is password protected, or is protected via the Profile Builder Pro plugin. At this time no other protection methods are supported.</b></p>
+
             <!-- Categories selector -->
             <p>
                 <strong>Categories:</strong><br>
                 <select name="llm_friendly_categories[]" multiple style="width: 100%; max-width: 500px;">
-                    <option value="all" <?php echo in_array('all', $selected_categories) ? 'selected' : ''; ?>>
+                    <option value="">
                         All Categories
                     </option>
                     <?php foreach ($categories as $category): ?>
@@ -85,7 +111,7 @@ function handle_settings_form() {
     }
 
     // Save settings
-    if (isset($_POST['llm_friendly_save_settings'])) {
+    if (isset($_POST['llm_friendly_save_settings']) or isset($_POST['llm_friendly_generate_markdown'])) {
         $selected_categories = isset($_POST['llm_friendly_categories']) ? (array) $_POST['llm_friendly_categories'] : [];
         $filter_tags = sanitize_text_field($_POST['llm_friendly_filter_tags']);
 
