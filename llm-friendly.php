@@ -2,7 +2,7 @@
 /*
 Plugin Name: LLM/AI-Friendly WP
 Description: A plugin to generate Markdown versions of WordPress posts and create llms.txt files for Large Language Models.
-Version: 0.2.1
+Version: 0.3
 Author: Kiboko Labs
 License: MIT
 */

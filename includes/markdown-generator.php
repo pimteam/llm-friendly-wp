@@ -46,27 +46,7 @@ function post_to_markdown( int $post_id ) : string|false {
  */
 function generate_all_markdown() {
     // Fetch settings
-    $categories = get_option( 'llm_friendly_categories', [] ); // Selected categories
-    $tags = get_option( 'llm_friendly_tags', [] ); // Selected tags
-    $include_all = get_option( 'llm_friendly_include_all', false ); // Include all categories flag
-
-    // Build query arguments
-    $args = [
-        'post_type'      => ['post', 'page'],
-        'post_status'    => 'publish',
-        'posts_per_page' => -1, // Get all matching posts
-    ];
-
-    if ( ! $include_all && ! empty( $categories ) ) {
-        $args['category__in'] = $categories; // Filter by categories
-    }
-
-    if ( ! empty( $tags ) ) {
-        $args['tag__in'] = $tags; // Filter by tags
-    }
-
-    // Query posts
-    $query = new \WP_Query( $args );
+    $query = get_eligible_posts_query();
 
     if ( $query->have_posts() ) {
         while ( $query->have_posts() ) {
@@ -134,4 +114,39 @@ function on_save_post($post_id, $post) {
     if ( should_convert( $post ) ) {
         post_to_markdown( $post_id );
     }
+}
+
+/**
+ * Retrieves a query of eligible posts based on selected categories and tags.
+ *
+ * This function builds a WP_Query to fetch posts and pages that match the selected categories
+ * and tags, as well as an optional flag to include all categories.
+ *
+ * @return \WP_Query The query object containing the eligible posts.
+ */
+function get_eligible_posts_query() {
+    $categories = get_option( 'llm_friendly_categories', [] ); // Selected categories
+    $tags = get_option( 'llm_friendly_tags', [] ); // Selected tags
+    $include_all = get_option( 'llm_friendly_include_all', false ); // Include all categories flag
+    $categories = array_filter($categories);
+
+    // Build query arguments
+    $args = [
+        'post_type'      => ['post', 'page'],
+        'post_status'    => 'publish',
+        'posts_per_page' => -1, // Get all matching posts
+    ];
+
+    if ( ! $include_all && ! empty( $categories ) ) {
+        $args['category__in'] = $categories; // Filter by categories
+    }
+
+    if ( ! empty( $tags ) ) {
+        $args['tag__in'] = $tags; // Filter by tags
+    }
+
+    // Query posts
+    $query = new \WP_Query( $args );
+
+    return $query;
 }
