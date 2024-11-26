@@ -5,8 +5,7 @@ Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 8.0
 Stable tag: trunk
-License: MIT
-License URI: https://mit-license.org/
+License: GPLv2 or later
 
 == Description ==
 
