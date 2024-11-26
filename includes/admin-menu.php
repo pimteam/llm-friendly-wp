@@ -165,12 +165,12 @@ function render_llms_txt_page() {
 
             <p>
                 <strong><?php _e('Title:', 'llm-friendly')?></strong><br>
-                <input name="llm_friendly_title" value="<?php echo esc_attr($title);?>" style="width: 100%; max-width: 900px;" required>
+                <input name="llm_friendly_title" value="<?php echo stripslashes(esc_attr($title));?>" style="width: 100%; max-width: 900px;" required>
             </p>
 
             <p>
                 <strong><?php _e('Description:', 'llm-friendly')?></strong><br>
-                <textarea name="llm_friendly_description" style="width: 100%; max-width: 900px;" rows="15"><?php echo esc_textarea($description); ?></textarea>
+                <textarea name="llm_friendly_description" style="width: 100%; max-width: 900px;" rows="15"><?php echo stripslashes(esc_textarea($description)); ?></textarea>
             </p>
 
             <p>

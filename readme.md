@@ -52,7 +52,7 @@
 
 ## Changelog
 
-### 3.0.0
+### 0.5.2
 - Initial release.
 - Markdown conversion for selected categories of posts/pages.
 - Automatic serving of Markdown versions when the URL ends with `md=1`.

@@ -1,0 +1,101 @@
+# Copyright (C) 2024 Kiboko Labs
+# This file is distributed under the MIT.
+msgid ""
+msgstr ""
+"Project-Id-Version: LLM-Friendly WP 0.5.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/llm-friendly\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-26T12:09:37+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: llm-friendly\n"
+
+#. Plugin Name of the plugin
+#: llm-friendly.php
+msgid "LLM-Friendly WP"
+msgstr ""
+
+#. Description of the plugin
+#: llm-friendly.php
+msgid "A plugin to generate AI and LLM-Friendly Markdown versions of WordPress posts and create llms.txt files for Large Language Models."
+msgstr ""
+
+#. Author of the plugin
+#: llm-friendly.php
+msgid "Kiboko Labs"
+msgstr ""
+
+#: includes/admin-menu.php:16
+#: includes/admin-menu.php:17
+msgid "LLM-Friendly"
+msgstr ""
+
+#: includes/admin-menu.php:27
+#: includes/admin-menu.php:28
+msgid "Content Settings"
+msgstr ""
+
+#: includes/admin-menu.php:38
+#: includes/admin-menu.php:39
+msgid "LLMs.txt"
+msgstr ""
+
+#: includes/admin-menu.php:61
+msgid "LLM-Friendly Content Settings"
+msgstr ""
+
+#: includes/admin-menu.php:65
+msgid "Choose what content to be available also in Markdown LLM-Friendly format:"
+msgstr ""
+
+#: includes/admin-menu.php:67
+msgid "Note: this markdown content will be <span style=\"color:red;\">public</span> unless your post/page is in Private mode, is password protected, or is protected via the Profile Builder plugin. At this time no other protection methods are supported."
+msgstr ""
+
+#: includes/admin-menu.php:71
+msgid "Categories:"
+msgstr ""
+
+#: includes/admin-menu.php:74
+msgid "All Categories"
+msgstr ""
+
+#: includes/admin-menu.php:87
+msgid "Filter by Tag (optional):"
+msgstr ""
+
+#: includes/admin-menu.php:89
+msgid "Enter tag(s), separated by commas"
+msgstr ""
+
+#: includes/admin-menu.php:94
+msgid "Save Settings"
+msgstr ""
+
+#: includes/admin-menu.php:95
+msgid "Generate Markdown Now"
+msgstr ""
+
+#: includes/admin-menu.php:164
+msgid "This file will be created according to the <a href=\"https://llmstxt.org/\" target=\"_blank\">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly."
+msgstr ""
+
+#: includes/admin-menu.php:167
+msgid "Title:"
+msgstr ""
+
+#: includes/admin-menu.php:172
+msgid "Description:"
+msgstr ""
+
+#: includes/admin-menu.php:177
+msgid "Save & Generate"
+msgstr ""
+
+#: includes/admin-menu.php:227
+msgid "LLMS.txt file generated successfully. <a href=\""
+msgstr ""
