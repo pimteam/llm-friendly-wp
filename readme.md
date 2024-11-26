@@ -6,7 +6,8 @@
 **Tested up to**: 6.7
 **Requires PHP**: 8.0
 **Stable tag**: trunk
-**License**: GPLv2 or later
+**License**: MIT
+**License URL**: https://opensource.org/license/mit
 
 ---
 

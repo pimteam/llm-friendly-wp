@@ -4,8 +4,9 @@ Tags: markdown, large language models, llms.txt, markdown converter, content dis
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: trunk
-License: GPLv2 or later
+Stable tag: 0.5.3
+License: MIT
+License URL: https://opensource.org/license/mit
 
 == Description ==
 
