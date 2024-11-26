@@ -1,12 +1,7 @@
 # LLM-Friendly WP
 
-**Contributors**: Kiboko Labs
-**Tags**: markdown, large language models, llms.txt, markdown converter, content discovery
-**Requires at least**: 5.0
-**Tested up to**: 6.7
-**Requires PHP**: 8.0
-**Stable tag**: trunk
 **License**: MIT
+
 **License URL**: https://opensource.org/license/mit
 
 ---
