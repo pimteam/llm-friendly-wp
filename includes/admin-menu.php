@@ -13,8 +13,8 @@ add_action('admin_menu', __NAMESPACE__.'\\settings_page');
  */
 function settings_page() {
     add_menu_page(
-        'LLM-Friendly Content Settings',
-        'LLM-Friendly WP',
+        __('LLM-Friendly', 'llm-friendly'),
+        __('LLM-Friendly', 'llm-friendly'),
         'manage_options',
         'llm-friendly',
         __NAMESPACE__.'\\render_settings_page',
@@ -24,8 +24,8 @@ function settings_page() {
 
     add_submenu_page(
         'llm-friendly',
-        'Content Settings',
-        'Content Settings',
+        __('Content Settings', 'llm-friendly'),
+        __('Content Settings', 'llm-friendly'),
         'manage_options',
         'llm-friendly',
         __NAMESPACE__.'\\render_settings_page',
@@ -35,8 +35,8 @@ function settings_page() {
 
     add_submenu_page(
         'llm-friendly',
-        'LLMs.txt',
-        'LLMs.txt',
+        __('LLMs.txt', 'llm-friendly'),
+        __('LLMs.txt', 'llm-friendly'),
         'manage_options',
         'llm-friendly-llmstxt',
         __NAMESPACE__.'\\render_llms_txt_page',
@@ -58,20 +58,20 @@ function render_settings_page() {
     $categories = get_categories(['hide_empty' => false]);
     ?>
     <div class="wrap">
-        <h1>LLM-Friendly Content Settings</h1>
+        <h1><?php _e('LLM-Friendly Content Settings', 'llm-friendly')?></h1>
         <form method="post" action="">
             <?php wp_nonce_field('llm_friendly_settings_action', 'llm_friendly_settings_nonce'); ?>
 
-            <h2>Choose what content to be available also in Markdown LLM-Friendly format:</h2>
+            <h2><?php _e('Choose what content to be available also in Markdown LLM-Friendly format:', 'llm-friendly')?></h2>
 
-            <p><b>Note: this markdown content will be <span style="color:red;">public</span> unless your post/page is in Private mode, is password protected, or is protected via the Profile Builder plugin. At this time no other protection methods are supported.</b></p>
+            <p><b><?php _e('Note: this markdown content will be <span style="color:red;">public</span> unless your post/page is in Private mode, is password protected, or is protected via the Profile Builder plugin. At this time no other protection methods are supported.', 'llm-friendly')?></b></p>
 
             <!-- Categories selector -->
             <p>
-                <strong>Categories:</strong><br>
+                <strong><?php _e('Categories:', 'llm-friendly')?></strong><br>
                 <select name="llm_friendly_categories[]" multiple style="width: 100%; max-width: 500px;">
                     <option value=""  <?php echo (empty($selected_categories) or !count($selected_categories)) ? 'selected' : ''; ?>>
-                        All Categories
+                        <?php _e('All Categories', 'llm-friendly')?>
                     </option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?php echo esc_attr($category->term_id); ?>"
@@ -84,15 +84,15 @@ function render_settings_page() {
 
             <!-- Tag filter -->
             <p>
-                <strong>Filter by Tag (optional):</strong><br>
+                <strong><?php _e('Filter by Tag (optional):', 'llm-friendly')?></strong><br>
                 <input type="text" name="llm_friendly_filter_tags" value="<?php echo esc_attr($filter_tags); ?>"
-                    style="width: 100%; max-width: 500px;" placeholder="Enter tag(s), separated by commas">
+                    style="width: 100%; max-width: 500px;" placeholder="<?php _e('Enter tag(s), separated by commas', 'llm-friendly')?>">
             </p>
 
             <!-- Action buttons -->
             <p>
-                <button type="submit" name="llm_friendly_save_settings" class="button button-primary">Save Settings</button>
-                <button type="submit" name="llm_friendly_generate_markdown" class="button button-secondary">Generate Markdown Now</button>
+                <button type="submit" name="llm_friendly_save_settings" class="button button-primary"><?php _e('Save Settings', 'llm-friendly')?></button>
+                <button type="submit" name="llm_friendly_generate_markdown" class="button button-secondary"><?php _e('Generate Markdown Now', 'llm-friendly')?></button>
             </p>
         </form>
     </div>
@@ -161,20 +161,20 @@ function render_llms_txt_page() {
         <form method="post" action="">
             <?php wp_nonce_field('llm_friendly_generate_llms_txt_action', 'llm_friendly_generate_llms_txt_nonce'); ?>
 
-            <p>This file will be created according to the <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly.</p>
+            <p><?php _e('This file will be created according to the <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly.', 'llm-friendly')?></p>
 
             <p>
-                <strong>Title:</strong><br>
+                <strong><?php _e('Title:', 'llm-friendly')?></strong><br>
                 <input name="llm_friendly_title" value="<?php echo esc_attr($title);?>" style="width: 100%; max-width: 900px;" required>
             </p>
 
             <p>
-                <strong>Description:</strong><br>
+                <strong><?php _e('Description:', 'llm-friendly')?></strong><br>
                 <textarea name="llm_friendly_description" style="width: 100%; max-width: 900px;" rows="15"><?php echo esc_textarea($description); ?></textarea>
             </p>
 
             <p>
-                <button type="submit" name="llm_friendly_generate_llms_txt" class="button button-primary">Save & Generate</button>
+                <button type="submit" name="llm_friendly_generate_llms_txt" class="button button-primary"><?php _e('Save & Generate', 'llm-friendly')?></button>
             </p>
         </form>
     </div>
@@ -224,7 +224,7 @@ function generate_llms_txt_file() {
 
     // Provide a download link
     $download_url = home_url('/llms.txt');
-    echo '<p>LLMS.txt file generated successfully. <a href="' . esc_url($download_url) . '" target="_blank">View LLMS.txt</a></p>';
+    echo '<p>'.__('LLMS.txt file generated successfully. <a href="' . esc_url($download_url) . '" target="_blank">View LLMS.txt</a>', 'llm-friendly').'</p>';
 }
 
 
