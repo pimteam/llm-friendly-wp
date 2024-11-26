@@ -140,12 +140,15 @@ function handle_settings_form() {
 function render_llms_txt_page() {
     // Get saved description
     $description = get_option('llm_friendly_description', '');
+    $title = get_option('llm_friendly_title', '');
 
     // Handle form submission
     if (isset($_POST['llm_friendly_generate_llms_txt'])) {
         check_admin_referer('llm_friendly_generate_llms_txt_action', 'llm_friendly_generate_llms_txt_nonce');
 
-        // Save the description
+        // Save title and description
+        $title = sanitize_text_field($_POST['llm_friendly_title']);
+        update_option('llm_friendly_title', $title);
         $description = sanitize_text_field($_POST['llm_friendly_description']);
         update_option('llm_friendly_description', $description);
 
@@ -158,9 +161,16 @@ function render_llms_txt_page() {
         <form method="post" action="">
             <?php wp_nonce_field('llm_friendly_generate_llms_txt_action', 'llm_friendly_generate_llms_txt_nonce'); ?>
 
+            <p>This file will be created according to the <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly.</p>
+
+            <p>
+                <strong>Title:</strong><br>
+                <input name="llm_friendly_title" value="<?php echo esc_attr($title);?>" style="width: 100%; max-width: 900px;" required>
+            </p>
+
             <p>
                 <strong>Description:</strong><br>
-                <textarea name="llm_friendly_description" style="width: 100%; max-width: 500px;" rows="5"><?php echo esc_textarea($description); ?></textarea>
+                <textarea name="llm_friendly_description" style="width: 100%; max-width: 900px;" rows="15"><?php echo esc_textarea($description); ?></textarea>
             </p>
 
             <p>
@@ -189,9 +199,10 @@ function generate_llms_txt_file() {
     }
 
     $description = get_option('llm_friendly_description', '');
+    $description = get_option('llm_friendly_title', '');
 
     // Generate the llms.txt content
-    $llms_txt_content = "# LLM-Friendly Content\n\n";
+    $llms_txt_content = "# ".esc_attr($title)."\n\n";
     $llms_txt_content .= $description . "\n\n";
 
     foreach ($grouped_posts as $category_name => $category_posts) {

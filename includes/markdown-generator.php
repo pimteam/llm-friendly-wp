@@ -26,6 +26,10 @@ function post_to_markdown( int $post_id ) : string|false {
     $html_content = apply_filters( 'the_content', $post->post_content );
     $title = $post->post_title;
 
+    // remove scripts
+    $html_content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $html_content);
+    $html_content = preg_replace('/\s+on\w+="[^"]*"/', '', $html_content); // Remove inline JavaScript events
+
     // Convert HTML to Markdown
     try {
         $converter = new HtmlConverter();
