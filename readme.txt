@@ -9,7 +9,7 @@ License: GPLv2 or later
 
 == Description ==
 
-LLM-Friendly WP is a plugin designed to make the documents written on your WordPress site easily discoverable and usable by large language models (LLMs and AI). This is achieved by generating Markdown versions of your chosen posts or pages and automatically serving the Markdown version of each URL when it ends with "?md=1".
+LLM-Friendly WP is a plugin designed to make the documents written on your WordPress site easily discoverable and usable by large language models (LLMs and AI). This is achieved by generating Markdown versions of your chosen posts or pages and automatically serving the Markdown version of each URL when it ends with "?md=1" or "&md=1".
 
 In addition, the plugin generates a `llms.txt` file, inspired by the [llms-txt project](https://llmstxt.org/), which helps LLMs easily access and index your site's Markdown content.
 
