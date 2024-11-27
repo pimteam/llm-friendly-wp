@@ -155,7 +155,8 @@ function render_llms_txt_page() {
         update_option('llm_friendly_description', $description);
 
         // Generate the llms.txt file
-        generate_llms_txt_file();
+        $llms_full = empty($_POST['llms_full']) ? 0 : 1;
+        generate_llms_txt_file($llms_full);
     }
     ?>
     <div class="wrap">
@@ -163,7 +164,7 @@ function render_llms_txt_page() {
         <form method="post" action="">
             <?php wp_nonce_field('llm_friendly_generate_llms_txt_action', 'llm_friendly_generate_llms_txt_nonce'); ?>
 
-            <p><?php esc_html_e('This file will be created according to the <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly.', 'llm-friendly')?></p>
+            <p><?php _e('This file will be created according to the <a href="https://llmstxt.org/" target="_blank">llmstxt.org</a> proposal to make documentation AI/LLM-Friendly.', 'llm-friendly')?></p>
 
             <p>
                 <strong><?php esc_html_e('Title:', 'llm-friendly')?></strong><br>
@@ -174,6 +175,8 @@ function render_llms_txt_page() {
                 <strong><?php esc_html_e('Description:', 'llm-friendly')?></strong><br>
                 <textarea name="llm_friendly_description" style="width: 100%; max-width: 900px;" rows="15"><?php echo stripslashes(esc_textarea($description)); ?></textarea>
             </p>
+
+            <p><input type="checkbox" name="llms_full" value="1"> <?php _e('Also generate lllms-full.txt - a file that will contain all the markdown combined so it can be fed into large-content AI / LLM bots', 'llm-friendly');?>
 
             <p>
                 <button type="submit" name="llm_friendly_generate_llms_txt" class="button button-primary"><?php esc_html_e('Save & Generate', 'llm-friendly')?></button>
@@ -186,7 +189,7 @@ function render_llms_txt_page() {
 /**
  * Generate the llms.txt file
  */
-function generate_llms_txt_file() {
+function generate_llms_txt_file($full = false) {
     $query = get_eligible_posts_query();
     $posts = $query->posts;
 
@@ -204,17 +207,27 @@ function generate_llms_txt_file() {
     $description = get_option('llm_friendly_title', '');
 
     // Generate the llms.txt content
-    $llms_txt_content = "# ".esc_attr($title)."\n\n";
-    $llms_txt_content .= $description . "\n\n";
+    $llms_txt_content = "# ".stripslashes(esc_attr($title))."\n\n";
+    $llms_full_content = "# ".stripslashes(esc_attr($title))."\n\n";
+    $llms_txt_content .= stripslashes($description) . "\n\n";
+    $llms_full_content .= stripslashes($description) . "\n\n";
 
     foreach ($grouped_posts as $category_name => $category_posts) {
         $llms_txt_content .= "## " . esc_html($category_name) . "\n\n";
+        $llms_full_content .= "## " . esc_html($category_name) . "\n\n";
+
         foreach ($category_posts as $post) {
             $permalink = get_permalink($post->ID);
             $permalink = add_query_arg('md', 1, $permalink);
             $llms_txt_content .= "- [" . esc_html(get_the_title($post->ID)) . "](" . $permalink.")\n";
         }
         $llms_txt_content .= "\n";
+
+        if($full) {
+            $markdown_content = get_post_meta($post->ID, '_llm_markdown_content', true);
+
+            $llms_full_content .= $markdown_content."\n\n";
+        }
     }
 
     // Ensure UTF-8 encoding and add BOM
@@ -224,9 +237,20 @@ function generate_llms_txt_file() {
     $file_path = ABSPATH . 'llms.txt';
     file_put_contents($file_path, $llms_txt_content);
 
+    if($full) {
+        $llms_full_content = "\xEF\xBB\xBF" . mb_convert_encoding($llms_full_content, 'UTF-8', 'auto');
+        $full_file_path = ABSPATH . 'llms-full.txt';
+        file_put_contents($file_path, $llms_full_content);
+    }
+
     // Provide a download link
     $download_url = home_url('/llms.txt');
-    echo '<p>'.__('LLMS.txt file generated successfully. <a href="' . esc_url($download_url) . '" target="_blank">View LLMS.txt</a>', 'llm-friendly').'</p>';
+    echo '<p>'.__('LLMS.txt file generated successfully. <a href="' . esc_url($download_url) . '" target="_blank">View llms.txt</a>', 'llm-friendly').'</p>';
+
+    if($full) {
+        $full_download_url = home_url('/llms.txt');
+        echo '<p>'.__('llms-full.txt file generated successfully. <a href="' . esc_url($full_download_url) . '" target="_blank">llms-full LLMS.txt</a>', 'llm-friendly').'</p>';
+    }
 }
 
 
